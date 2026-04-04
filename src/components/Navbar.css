@@ -1,0 +1,86 @@
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  z-index: 1000;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s ease;
+}
+
+.navbar-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navbar-logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-h);
+  letter-spacing: -0.5px;
+}
+
+.navbar-logo span {
+  color: var(--primary);
+}
+
+.navbar-menu {
+  display: flex;
+  gap: 32px;
+}
+
+.navbar-menu a {
+  color: var(--text);
+  font-weight: 500;
+  font-size: 1rem;
+  padding: 8px 0;
+  position: relative;
+}
+
+.navbar-menu a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: var(--primary);
+  transition: width 0.3s ease;
+}
+
+.navbar-menu a:hover {
+  color: var(--text-h);
+}
+
+.navbar-menu a:hover::after {
+  width: 100%;
+}
+
+.navbar-mobile-toggle {
+  display: none;
+  flex-direction: column;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.navbar-mobile-toggle span {
+  width: 24px;
+  height: 2px;
+  background-color: var(--text-h);
+  border-radius: 2px;
+}
+
+@media (max-width: 768px) {
+  .navbar-menu {
+    display: none; /* simple responsive handling for now */
+  }
+  .navbar-mobile-toggle {
+    display: flex;
+  }
+}

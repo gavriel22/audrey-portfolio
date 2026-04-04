@@ -1,0 +1,7 @@
+/* Reusing the timeline CSS classes from Experience.css since they share the same structure */
+.organization {
+  background-color: var(--bg-secondary);
+}
+
+/* Base timeline styles duplicate to prevent dependency issues if they are separated later,
+   but sharing classes in the global scope (since we import them) means we can just keep it minimal. */
