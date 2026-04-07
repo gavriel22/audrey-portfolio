@@ -26,16 +26,16 @@ const About = () => {
           </div>
           <div className="about-skills">
             <h3>Key Skills</h3>
-            <div className="skills-container">
-              {aboutData.skills.map((skill, index) => (
-                <div key={index} className="skill-item">
+            <div className="skill-bars">
+              {aboutData.skills?.map((skill, index) => (
+                <div key={index} className="skill-bar">
                   <div className="skill-info">
                     <span className="skill-name">{skill.name}</span>
                     <span className="skill-percentage">{skill.percentage}%</span>
                   </div>
-                  <div className="skill-bar">
+                  <div className="progress-bg">
                     <div 
-                      className="skill-progress" 
+                      className="progress-fill" 
                       style={{ width: `${skill.percentage}%` }}
                     ></div>
                   </div>
