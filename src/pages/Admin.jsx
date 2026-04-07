@@ -92,15 +92,13 @@ const HeroAdmin = () => {
 
     setUploading(type);
     
-    // Gunakan teknik FileReader (Base64) agar koneksi Vercel CLI tidak ter-Reset/crash saat streaming
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = async () => {
+    // Fungsi bantuan untuk mengirim hasil kompresi/bacaan file ke Server
+    const uploadBase64 = async (base64Str, filename) => {
       try {
         const response = await fetch('/api/upload', { 
           method: 'POST', 
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ filename: file.name, fileBase64: reader.result })
+          body: JSON.stringify({ filename, fileBase64: base64Str })
         });
         
         if(!response.ok) throw new Error('Upload gagal');
@@ -110,11 +108,38 @@ const HeroAdmin = () => {
         await saveData(updatedData, true); 
         alert("File sukses diunggah ke Vercel Blob & web telah diperbarui!");
       } catch (error) { 
-        alert("Gagal mengunggah file. Pastikan ukuran di bawah 4MB."); 
+        alert("Gagal mengunggah file. Pastikan Server Lokal berjalan baik."); 
       } finally { 
         setUploading(null); 
       }
     };
+
+    // Apabila Gambar: Kompres sangat kecil dengan Canvas sebelum diupload
+    if (type === 'photo' && file.type.startsWith('image/')) {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const MAX_WIDTH = 600; // Kecilkan ke max batas 600px
+        let scaleSize = 1;
+        if (img.width > MAX_WIDTH) scaleSize = MAX_WIDTH / img.width;
+        
+        canvas.width = img.width * scaleSize;
+        canvas.height = img.height * scaleSize;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        
+        // Convert ke base64 (85% JPEG) super ringan
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.85); 
+        URL.revokeObjectURL(img.src);
+        uploadBase64(dataUrl, file.name);
+      };
+      img.src = URL.createObjectURL(file);
+    } else {
+      // Jika dokumen PDF (CV), langsung dibaca karena PDF aman dan stabil
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => uploadBase64(reader.result, file.name);
+    }
   };
 
   if(loading) return <p>Loading data server...</p>;
