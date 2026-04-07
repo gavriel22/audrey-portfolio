@@ -7,8 +7,8 @@ const Achievement = () => {
 
   useEffect(() => {
     fetch('/api/get-content?section=achievement')
-      .then(res => { if(res.ok) return res.json(); throw new Error(); })
-      .then(data => { if(Array.isArray(data)) setAchievements(data); })
+      .then(res => { if (res.ok) return res.json(); throw new Error(); })
+      .then(data => { if (Array.isArray(data)) setAchievements(data); })
       .catch(() => console.log('Using default achievement data'));
   }, []);
 

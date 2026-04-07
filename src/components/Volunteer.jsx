@@ -7,8 +7,8 @@ const Volunteer = () => {
 
   useEffect(() => {
     fetch('/api/get-content?section=volunteer')
-      .then(res => { if(res.ok) return res.json(); throw new Error(); })
-      .then(data => { if(Array.isArray(data)) setVolunteers(data); })
+      .then(res => { if (res.ok) return res.json(); throw new Error(); })
+      .then(data => { if (Array.isArray(data)) setVolunteers(data); })
       .catch(() => console.log('Using default volunteer data'));
   }, []);
 

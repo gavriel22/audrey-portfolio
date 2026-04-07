@@ -6,8 +6,8 @@ const Organization = () => {
 
   useEffect(() => {
     fetch('/api/get-content?section=organization')
-      .then(res => { if(res.ok) return res.json(); throw new Error(); })
-      .then(data => { if(Array.isArray(data)) setOrganizations(data); })
+      .then(res => { if (res.ok) return res.json(); throw new Error(); })
+      .then(data => { if (Array.isArray(data)) setOrganizations(data); })
       .catch(() => console.log('Using default organization data'));
   }, []);
 

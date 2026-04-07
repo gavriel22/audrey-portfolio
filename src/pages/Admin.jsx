@@ -301,14 +301,18 @@ const OrganizationAdmin = () => {
         <input required type="text" placeholder="Role" value={form.role} onChange={e => setForm({...form, role: e.target.value})} />
         <input required type="text" placeholder="Organization" value={form.org} onChange={e => setForm({...form, org: e.target.value})} />
         <input required type="text" placeholder="Period" value={form.period} onChange={e => setForm({...form, period: e.target.value})} />
-        <textarea required placeholder="Description" value={form.description} onChange={e => setForm({...form, description: e.target.value})}></textarea>
+        <textarea placeholder="Description (Opsional)" value={form.description} onChange={e => setForm({...form, description: e.target.value})}></textarea>
         <button type="submit" className="btn-add">{editingId ? 'Update to DB' : 'Add to DB'}</button>
       </form>
       <div className="admin-list">
         {list.map((i, idx) => (
            <div key={i.id} className="admin-list-item">
              <div className="item-details"><strong>{i.role}</strong> at {i.org} <p>{i.description}</p></div>
-             <div style={{display:'flex', flexDirection:'column', gap:'0.5rem'}}><button onClick={()=>moveUp(idx)} className="btn-reorder">↑</button><button onClick={()=>edit(i)} className="btn-edit" style={{background:'var(--primary)',color:'white',border:'none'}}>Edit</button><button onClick={()=>remove(i.id)} className="btn-delete">Delete</button></div>
+             <div style={{display:'flex', flexDirection:'column', gap:'0.5rem', alignItems: 'flex-end'}}>
+               <div style={{display:'flex', gap:'0.5rem'}}><button onClick={()=>moveUp(idx)} className="btn-reorder">↑</button><button onClick={()=>moveDown(idx)} className="btn-reorder">↓</button></div>
+               <button onClick={()=>edit(i)} className="btn-edit" style={{background:'var(--primary)',color:'white',border:'none', padding:'4px', width:'100%'}}>Edit</button>
+               <button onClick={()=>remove(i.id)} className="btn-delete" style={{width:'100%'}}>Delete</button>
+             </div>
            </div>
         ))}
       </div>
@@ -328,6 +332,9 @@ const AchievementAdmin = () => {
     };
     const edit = (i) => { setEditingId(i.id); setForm({ title: i.title, context: i.context, year: i.year, description: i.description }); };
     const remove = (id) => saveList(list.filter(i => i.id !== id));
+    const moveUp = (idx) => { if(idx===0) return; const l=[...list]; [l[idx-1], l[idx]]=[l[idx], l[idx-1]]; saveList(l); };
+    const moveDown = (idx) => { if(idx===list.length-1) return; const l=[...list]; [l[idx+1], l[idx]]=[l[idx], l[idx+1]]; saveList(l); };
+    
     if(loading) return <p>Loading server...</p>;
 
     return (
@@ -337,14 +344,18 @@ const AchievementAdmin = () => {
           <input required type="text" placeholder="Title" value={form.title} onChange={e=>setForm({...form, title:e.target.value})} />
           <input required type="text" placeholder="Context" value={form.context} onChange={e=>setForm({...form, context:e.target.value})} />
           <input required type="text" placeholder="Year" value={form.year} onChange={e=>setForm({...form, year:e.target.value})} />
-          <textarea required placeholder="Desc" value={form.description} onChange={e=>setForm({...form, description:e.target.value})}></textarea>
-          <button type="submit" className="btn-add">Save to DB</button>
+          <textarea placeholder="Desc (Opsional)" value={form.description} onChange={e=>setForm({...form, description:e.target.value})}></textarea>
+          <button type="submit" className="btn-add">{editingId ? 'Update to DB' : 'Save to DB'}</button>
         </form>
         <div className="admin-list">
-          {list.map((i) => (
+          {list.map((i, idx) => (
              <div key={i.id} className="admin-list-item">
                <div className="item-details"><strong>{i.title}</strong><p>{i.description}</p></div>
-               <div style={{display:'flex',gap:'0.5rem'}}><button onClick={()=>edit(i)} style={{background:'var(--primary)', color:'white'}}>Edit</button><button onClick={()=>remove(i.id)}>Del DB</button></div>
+               <div style={{display:'flex', flexDirection:'column', gap:'0.5rem', alignItems: 'flex-end'}}>
+                 <div style={{display:'flex', gap:'0.5rem'}}><button onClick={()=>moveUp(idx)} className="btn-reorder">↑</button><button onClick={()=>moveDown(idx)} className="btn-reorder">↓</button></div>
+                 <button onClick={()=>edit(i)} style={{background:'var(--primary)', color:'white', width:'100%', padding:'4px', border:'none'}}>Edit</button>
+                 <button onClick={()=>remove(i.id)} style={{width:'100%'}}>Del DB</button>
+               </div>
              </div>
           ))}
         </div>
@@ -364,6 +375,9 @@ const VolunteerAdmin = () => {
     };
     const edit = (i) => { setEditingId(i.id); setForm({ role: i.role, organization: i.organization, period: i.period, description: i.description }); };
     const remove = (id) => saveList(list.filter(i => i.id !== id));
+    const moveUp = (idx) => { if(idx===0) return; const l=[...list]; [l[idx-1], l[idx]]=[l[idx], l[idx-1]]; saveList(l); };
+    const moveDown = (idx) => { if(idx===list.length-1) return; const l=[...list]; [l[idx+1], l[idx]]=[l[idx], l[idx+1]]; saveList(l); };
+    
     if(loading) return <p>Loading server...</p>;
 
     return (
@@ -373,14 +387,18 @@ const VolunteerAdmin = () => {
           <input required type="text" placeholder="Role" value={form.role} onChange={e=>setForm({...form, role:e.target.value})} />
           <input required type="text" placeholder="Org" value={form.organization} onChange={e=>setForm({...form, organization:e.target.value})} />
           <input required type="text" placeholder="Period" value={form.period} onChange={e=>setForm({...form, period:e.target.value})} />
-          <textarea required placeholder="Desc" value={form.description} onChange={e=>setForm({...form, description:e.target.value})}></textarea>
-          <button type="submit" className="btn-add">Save to DB</button>
+          <textarea placeholder="Desc (Opsional)" value={form.description} onChange={e=>setForm({...form, description:e.target.value})}></textarea>
+          <button type="submit" className="btn-add">{editingId ? 'Update to DB' : 'Save to DB'}</button>
         </form>
         <div className="admin-list">
-          {list.map((i) => (
+          {list.map((i, idx) => (
              <div key={i.id} className="admin-list-item">
                <div className="item-details"><strong>{i.role}</strong><p>{i.organization}</p></div>
-               <div style={{display:'flex',gap:'0.5rem'}}><button onClick={()=>edit(i)} style={{background:'var(--primary)', color:'white'}}>Edit</button><button onClick={()=>remove(i.id)}>Del DB</button></div>
+               <div style={{display:'flex', flexDirection:'column', gap:'0.5rem', alignItems: 'flex-end'}}>
+                 <div style={{display:'flex', gap:'0.5rem'}}><button onClick={()=>moveUp(idx)} className="btn-reorder">↑</button><button onClick={()=>moveDown(idx)} className="btn-reorder">↓</button></div>
+                 <button onClick={()=>edit(i)} style={{background:'var(--primary)', color:'white', width:'100%', padding:'4px', border:'none'}}>Edit</button>
+                 <button onClick={()=>remove(i.id)} style={{width:'100%'}}>Del DB</button>
+               </div>
              </div>
           ))}
         </div>
@@ -427,20 +445,38 @@ const PortfolioAdmin = () => {
       else alert("Gagal menghapus project.");
     }
   };
+  const moveUp = (idx) => { 
+    if(idx===0) return; 
+    const l=[...list]; [l[idx-1], l[idx]]=[l[idx], l[idx-1]]; 
+    setList(l); 
+    // Portfolio saves on per-item basis natively via add/update hooks, but reordering requires updating the DB. Wait, Portfolio items are independent rows!
+    alert('Susunan untuk portfolio projects masih diurutkan berdasar waktu (ID) di database Neon.');
+  };
+  const moveDown = (idx) => { 
+    if(idx===list.length-1) return; 
+    const l=[...list]; [l[idx+1], l[idx]]=[l[idx], l[idx+1]]; 
+    setList(l); 
+    alert('Susunan untuk portfolio projects masih diurutkan berdasar waktu (ID) di database Neon.');
+  };
 
   return (
     <section className="admin-section">
       <h2>Manage Portfolio / Projects (Table `projects`)</h2>
       <form className="admin-form" onSubmit={handleSubmit}>
         <input required type="text" placeholder="Title" value={form.title} onChange={e=>setForm({...form, title:e.target.value})} />
-        <textarea required placeholder="Desc" value={form.description} onChange={e=>setForm({...form, description:e.target.value})}></textarea>
+        <textarea placeholder="Desc (Opsional)" value={form.description} onChange={e=>setForm({...form, description:e.target.value})}></textarea>
         <input type="text" placeholder="URL" value={form.link} onChange={e=>setForm({...form, link:e.target.value})} />
         <button type="submit" className="btn-add">Add to DB</button>
       </form>
       <div className="admin-list">
-        {Array.isArray(list) && list.map(i => (
+        {Array.isArray(list) && list.map((i, idx) => (
           <div key={i.id} className="admin-list-item">
              <div className="item-details"><strong>{i.title}</strong></div>
+             <div style={{display:'flex', flexDirection:'column', gap:'0.5rem', alignItems: 'flex-end'}}>
+                 <div style={{display:'flex', gap:'0.5rem'}}><button onClick={()=>moveUp(idx)} className="btn-reorder">↑</button><button onClick={()=>moveDown(idx)} className="btn-reorder">↓</button></div>
+                 <button onClick={()=>edit(i)} style={{background:'var(--primary)', color:'white', width:'100%', padding:'4px', border:'none'}}>Edit</button>
+                 <button onClick={()=>remove(i.id)} style={{width:'100%'}}>Del DB</button>
+             </div>
           </div>
         ))}
       </div>
