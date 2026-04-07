@@ -194,6 +194,22 @@
   font-weight: 500;
 }
 
+.btn-reorder {
+  background-color: var(--secondary);
+  color: var(--primary);
+  border: 1px solid var(--primary);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-reorder:hover {
+  background-color: var(--primary);
+  color: white;
+}
+
 .btn-delete {
   background-color: #fee2e2;
   color: #ef4444;

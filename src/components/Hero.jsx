@@ -32,7 +32,11 @@ const Hero = () => {
         </div>
         <div className="hero-image-wrapper">
           <div className="hero-profile-picture">
-            <div className="profile-placeholder-bg"></div>
+            {heroData.photoUrl ? (
+               <img src={heroData.photoUrl} alt="Audrey Profile" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
+            ) : (
+               <div className="profile-placeholder-bg"></div>
+            )}
           </div>
         </div>
       </div>
