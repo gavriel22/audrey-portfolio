@@ -1,7 +1,8 @@
+import { useState, useEffect } from 'react';
 import './Experience.css';
 
 const Experience = () => {
-  const experiences = [
+  const [experiences, setExperiences] = useState([
     {
       id: 1,
       role: "Supply Chain Analyst Intern",
@@ -23,14 +24,26 @@ const Experience = () => {
       period: "Jul 2024 - Aug 2024",
       description: "Assisted in demand forecasting using historical sales data and Excel VBA, reducing stockout events across 3 main distribution centers."
     }
-  ];
+  ]);
+  const [showAll, setShowAll] = useState(false);
+
+  useEffect(() => {
+    const saved = localStorage.getItem('portfolio_experiences');
+    if (saved) {
+      setExperiences(JSON.parse(saved));
+    }
+  }, []);
+
+  if (experiences.length === 0) return null;
+
+  const displayedItems = showAll ? experiences : experiences.slice(0, 3);
 
   return (
     <section id="experience" className="section experience">
       <div className="container">
         <h2 className="section-title">Experience</h2>
         <div className="timeline">
-          {experiences.map((exp) => (
+          {displayedItems.map((exp) => (
             <div key={exp.id} className="timeline-item">
               <div className="timeline-dot"></div>
               <div className="timeline-content">
@@ -44,6 +57,13 @@ const Experience = () => {
             </div>
           ))}
         </div>
+        {experiences.length > 3 && (
+          <div style={{ textAlign: 'center', marginTop: '3rem' }}>
+            <button className="btn-show-more" onClick={() => setShowAll(!showAll)}>
+              {showAll ? 'Show Less ⬆' : 'Show More ⬇'}
+            </button>
+          </div>
+        )}
       </div>
     </section>
   );

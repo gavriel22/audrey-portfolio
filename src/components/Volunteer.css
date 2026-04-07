@@ -1,0 +1,14 @@
+/* We will reuse the timeline classes defined in the global or Experience components,
+   but we add a background color specific to the volunteer section to alternate sections correctly */
+
+.volunteer {
+  background-color: var(--bg-secondary);
+}
+
+/* Ensure the timeline styles are consistent if they rely on specific cascades */
+.volunteer .timeline-company {
+  color: var(--primary);
+  margin-top: 0;
+  margin-bottom: 15px;
+  font-weight: 500;
+}

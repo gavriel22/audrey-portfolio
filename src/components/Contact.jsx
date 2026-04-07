@@ -1,32 +1,47 @@
+import { useState, useEffect } from 'react';
 import './Contact.css';
 
 const Contact = () => {
+  const [contactData, setContactData] = useState({
+    title: "Let's talk about your next project.",
+    subtitle: "Whether you have a question or just want to say hi, I'll try my best to get back to you!",
+    email: "hello@audrey.com",
+    phone: "+62 812 3456 7890",
+    linkedin: "https://linkedin.com",
+    github: "https://github.com"
+  });
+
+  useEffect(() => {
+    const saved = localStorage.getItem('portfolio_contact');
+    if (saved) {
+      setContactData(JSON.parse(saved));
+    }
+  }, []);
+
   return (
     <section id="contact" className="section contact">
       <div className="container">
         <h2 className="section-title">Get In Touch</h2>
         <div className="contact-wrapper">
           <div className="contact-info">
-            <h3>Let's talk about your next project.</h3>
-            <p>
-              Whether you have a question or just want to say hi, I'll try my best to get back to you!
-            </p>
+            <h3>{contactData.title}</h3>
+            <p>{contactData.subtitle}</p>
             <div className="contact-details">
               <div className="contact-item">
                 <span className="contact-icon">📧</span>
-                <a href="mailto:hello@audrey.com">hello@audrey.com</a>
+                <a href={`mailto:${contactData.email}`}>{contactData.email}</a>
               </div>
               <div className="contact-item">
                 <span className="contact-icon">📱</span>
-                <a href="tel:+6281234567890">+62 812 3456 7890</a>
+                <a href={`tel:${contactData.phone.replace(/\s+/g, '')}`}>{contactData.phone}</a>
               </div>
               <div className="contact-item">
                 <span className="contact-icon">🔗</span>
-                <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+                <a href={contactData.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>
               </div>
               <div className="contact-item">
                 <span className="contact-icon">🐙</span>
-                <a href="https://github.com" target="_blank" rel="noopener noreferrer">GitHub</a>
+                <a href={contactData.github} target="_blank" rel="noopener noreferrer">GitHub</a>
               </div>
             </div>
           </div>
