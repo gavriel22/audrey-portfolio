@@ -1,4 +1,3 @@
-// api/upload.js
 import { put } from '@vercel/blob';
 
 export default async function handler(req, res) {
@@ -7,10 +6,14 @@ export default async function handler(req, res) {
   }
 
   try {
-    const filename = req.query.filename;
+    const { filename, fileBase64 } = req.body;
+    if (!filename || !fileBase64) return res.status(400).json({ error: 'Data file tidak valid' });
 
-    // Proses upload file ke Vercel Blob
-    const blob = await put(filename, req, {
+    // Vercel Blob akan menerima object Buffer dari pemisahan prefix Base64
+    const base64Data = fileBase64.split(',')[1];
+    const buffer = Buffer.from(base64Data, 'base64');
+
+    const blob = await put(filename, buffer, {
       access: 'public',
     });
 

@@ -1,30 +1,14 @@
 import { useState, useEffect } from 'react';
-import './Organization.css';
 
 const Organization = () => {
-  const [organizations, setOrganizations] = useState([
-    {
-      id: 1,
-      role: "Head of External Affairs",
-      org: "HMTI UGM (Himpunan Mahasiswa Teknik Industri)",
-      period: "2024 - 2025",
-      description: "Led a team of 15 staff members in connecting the student union with 30+ external partners for sponsorships, company visits, and industrial seminars."
-    },
-    {
-      id: 2,
-      role: "Logistics Coordinator",
-      org: "Industrial Engineering Fair 2024",
-      period: "2023 - 2024",
-      description: "Coordinated the venue, equipment, and supply chain for a national-scale student event attended by 1,000+ participants."
-    }
-  ]);
+  const [organizations, setOrganizations] = useState([]);
   const [showAll, setShowAll] = useState(false);
 
   useEffect(() => {
-    const saved = localStorage.getItem('portfolio_organizations');
-    if (saved) {
-      setOrganizations(JSON.parse(saved));
-    }
+    fetch('/api/get-content?section=organization')
+      .then(res => { if(res.ok) return res.json(); throw new Error(); })
+      .then(data => { if(Array.isArray(data)) setOrganizations(data); })
+      .catch(() => console.log('Using default organization data'));
   }, []);
 
   if (organizations.length === 0) return null;
@@ -32,7 +16,7 @@ const Organization = () => {
   const displayedItems = showAll ? organizations : organizations.slice(0, 3);
 
   return (
-    <section id="organization" className="section organization">
+    <section id="organization" className="section timeline-section bg-secondary">
       <div className="container">
         <h2 className="section-title">Organization</h2>
         <div className="timeline">

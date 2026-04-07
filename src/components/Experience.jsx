@@ -1,37 +1,15 @@
 import { useState, useEffect } from 'react';
-import './Experience.css';
+import './Experience.css'; // Assuming this uses the same CSS file name or index.css for list containers
 
 const Experience = () => {
-  const [experiences, setExperiences] = useState([
-    {
-      id: 1,
-      role: "Supply Chain Analyst Intern",
-      company: "PT Astra Honda Motor",
-      period: "Jul 2025 - Sep 2025",
-      description: "Analyzed material flow layout to reduce transportation waste. Implemented Lean Manufacturing methodologies resulting in a 15% improvement in logistics efficiency."
-    },
-    {
-      id: 2,
-      role: "Operations Management Project",
-      company: "UGM Laboratory",
-      period: "Feb 2025 - Jun 2025",
-      description: "Designed a simulation model in Arena to optimize queuing systems at a major manufacturing plant, reducing average wait times by 20 minutes."
-    },
-    {
-      id: 3,
-      role: "Production Planning Intern",
-      company: "FMCG Company",
-      period: "Jul 2024 - Aug 2024",
-      description: "Assisted in demand forecasting using historical sales data and Excel VBA, reducing stockout events across 3 main distribution centers."
-    }
-  ]);
+  const [experiences, setExperiences] = useState([]);
   const [showAll, setShowAll] = useState(false);
 
   useEffect(() => {
-    const saved = localStorage.getItem('portfolio_experiences');
-    if (saved) {
-      setExperiences(JSON.parse(saved));
-    }
+    fetch('/api/get-content?section=experience')
+      .then(res => { if(res.ok) return res.json(); throw new Error(); })
+      .then(data => { if(Array.isArray(data)) setExperiences(data); })
+      .catch(() => console.log('Using default experience data'));
   }, []);
 
   if (experiences.length === 0) return null;
@@ -39,7 +17,7 @@ const Experience = () => {
   const displayedItems = showAll ? experiences : experiences.slice(0, 3);
 
   return (
-    <section id="experience" className="section experience">
+    <section id="experience" className="section timeline-section">
       <div className="container">
         <h2 className="section-title">Experience</h2>
         <div className="timeline">

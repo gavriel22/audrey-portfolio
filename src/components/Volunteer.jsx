@@ -6,27 +6,10 @@ const Volunteer = () => {
   const [showAll, setShowAll] = useState(false);
 
   useEffect(() => {
-    const saved = localStorage.getItem('portfolio_volunteers');
-    if (saved) {
-      setVolunteers(JSON.parse(saved));
-    } else {
-      setVolunteers([
-        {
-          id: 1,
-          role: "Event Coordinator",
-          organization: "Local Orphanage Care",
-          period: "Mar 2024 - Present",
-          description: "Organized monthly educational programs and donation drives, impacting over 50 children. Managed communications between 20+ volunteers."
-        },
-        {
-          id: 2,
-          role: "Campaign Volunteer",
-          organization: "Earth Hour Indonesia",
-          period: "Jan 2023 - Apr 2023",
-          description: "Assisted in social media awareness campaigns and on-the-ground preparation for the main Earth Hour event."
-        }
-      ]);
-    }
+    fetch('/api/get-content?section=volunteer')
+      .then(res => { if(res.ok) return res.json(); throw new Error(); })
+      .then(data => { if(Array.isArray(data)) setVolunteers(data); })
+      .catch(() => console.log('Using default volunteer data'));
   }, []);
 
   if (volunteers.length === 0) return null;
@@ -34,9 +17,9 @@ const Volunteer = () => {
   const displayedItems = showAll ? volunteers : volunteers.slice(0, 3);
 
   return (
-    <section id="volunteer" className="section volunteer">
+    <section id="volunteer" className="section timeline-section bg-secondary">
       <div className="container">
-        <h2 className="section-title">Volunteer Experience</h2>
+        <h2 className="section-title">Volunteering</h2>
         <div className="timeline">
           {displayedItems.map((vol) => (
             <div key={vol.id} className="timeline-item">

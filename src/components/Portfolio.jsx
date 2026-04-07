@@ -6,14 +6,13 @@ const Portfolio = () => {
   const [showAll, setShowAll] = useState(false);
 
   useEffect(() => {
-    // Memanggil jembatan API Vercel Serverless Function
     fetch('/api/get-projects')
-      .then((res) => res.json())
-      .then((data) => setProjects(data))
+      .then((res) => { if (res.ok) return res.json(); throw new Error(); })
+      .then((data) => { if (Array.isArray(data)) setProjects(data); })
       .catch((err) => console.error("Gagal ambil data:", err));
   }, []);
 
-  if (projects.length === 0) return null;
+  if (!Array.isArray(projects) || projects.length === 0) return null;
 
   const displayedItems = showAll ? projects : projects.slice(0, 3);
 
