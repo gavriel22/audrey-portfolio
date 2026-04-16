@@ -24,9 +24,9 @@ function useCloudContent(section, defaultData) {
       if(!response.ok) {
         throw new Error('Database Error 500');
       }
-      if(showToast) alert(`${section} berhasil disimpan ke Database Utama!`);
+      if(showToast) alert(`Hebat! Perubahan pada ${section} berhasil disimpan ke database.`);
     } catch (e) { 
-      alert('GAGAL UPDATE. Silakan pastikan Database online / tabel global_content ada.'); 
+      alert('Maaf Audrey, gagal menyimpan perubahan. Coba cek koneksi internetmu atau muat ulang halamannya ya.'); 
     }
   };
 
@@ -35,11 +35,42 @@ function useCloudContent(section, defaultData) {
 
 const Admin = () => {
   const [activeTab, setActiveTab] = useState('Hero');
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [passwordInput, setPasswordInput] = useState('');
+  const [loginError, setLoginError] = useState('');
   const tabs = ['Hero', 'About', 'Experience', 'Achievement', 'Organization', 'Volunteer', 'Portfolio', 'Contact'];
 
   useEffect(() => {
     fetch('/api/init-db').catch(() => {});
+    if (sessionStorage.getItem('audrey_admin_auth') === 'true') {
+        setIsAuthenticated(true);
+    }
   }, []);
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+    if (passwordInput === 'admin123' || passwordInput === 'audrey') {
+       sessionStorage.setItem('audrey_admin_auth', 'true');
+       setIsAuthenticated(true);
+    } else {
+       setLoginError('Maaf sayang, password-nya salah nih. Coba diingat-ingat lagi yuk!');
+    }
+  };
+
+  if (!isAuthenticated) {
+    return (
+      <div className="admin-container" style={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', flexDirection: 'column'}}>
+        <form onSubmit={handleLogin} style={{padding: '2rem', backgroundColor: 'var(--bg-secondary)', borderRadius: '12px', textAlign: 'center', maxWidth: '400px', width: '90%'}}>
+           <h2 style={{marginBottom: '10px'}}>Admin Dashboard</h2>
+           <p style={{marginBottom: '20px'}}>Halo Audrey! Masukkan password untuk masuk ya.</p>
+           <input type="password" value={passwordInput} onChange={e => {setPasswordInput(e.target.value); setLoginError('');}} style={{padding: '12px', marginBottom: '10px', width: '100%', borderRadius: '6px', border: '1px solid var(--border-color)', color: 'black'}} placeholder="Password..." />
+           {loginError && <p style={{color: 'red', fontSize: '14px', marginBottom: '10px'}}>{loginError}</p>}
+           <button type="submit" className="btn-add" style={{width: '100%', padding: '12px'}}>Masuk Admin</button>
+        </form>
+        <a href="/" style={{marginTop: '20px', color: 'var(--text-secondary)'}}>← Kembali ke web utama</a>
+      </div>
+    );
+  }
 
   return (
     <div className="admin-container">
@@ -101,14 +132,21 @@ const HeroAdmin = () => {
           body: JSON.stringify({ filename, fileBase64: base64Str })
         });
         
-        if(!response.ok) throw new Error('Upload gagal');
+        if(!response.ok) {
+           const errData = await response.json().catch(() => ({}));
+           throw new Error(errData.error || 'Upload gagal');
+        }
         
         const newBlob = await response.json();
         const updatedData = { ...data, [type === 'photo' ? 'photoUrl' : 'cvLink']: newBlob.url };
         await saveData(updatedData, true); 
-        alert("File sukses diunggah ke Vercel Blob & web telah diperbarui!");
+        alert("Yeay! File sudah berhasil diunggah dan tersimpan.");
       } catch (error) { 
-        alert("Gagal mengunggah file. Pastikan Server Lokal berjalan baik."); 
+        if (error.message.includes('Maksimal 4MB') || error.message.includes('terlalu besar')) {
+           alert("Maaf Audrey, file ini terlalu besar. Pastikan ukurannya di bawah 4MB ya!");
+        } else {
+           alert(`Oops, gagal memproses unggahan file. (Pesan: ${error.message})`);
+        }
       } finally { 
         setUploading(null); 
       }
@@ -420,29 +458,29 @@ const PortfolioAdmin = () => {
     if(editingId) {
        const response = await fetch('/api/update-project', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: editingId, ...form }) });
        if(response.ok) {
-           alert("Project Berhasil Diupdate di Database!");
+           alert("Hore! Project berhasil diperbarui di database.");
            setList(list.map(i => i.id === editingId ? {...form, id: editingId} : i));
            setEditingId(null); setForm({ title: '', description: '', link: '' });
-       } else { alert("Gagal update project."); }
+       } else { alert("Oh tidak, gagal memperbarui project. Coba cek koneksinya ya."); }
        return;
     }
 
     const response = await fetch('/api/add-project', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(form) });
     if (response.ok) {
-      alert("Project Berhasil Ditambahkan!");
+      alert("Hebat! Project baru berhasil ditambahkan!");
       setList([{ id: Date.now(), ...form }, ...list]);
       setForm({ title: '', description: '', link: '' });
     } else {
-      alert("Gagal menambahkan ke database.");
+      alert("Maaf Audrey, gagal menyimpan project ke database.");
     }
   };
 
   const edit = (i) => { setEditingId(i.id); setForm({ title: i.title, description: i.description, link: i.link }); };
   const remove = async (id) => {
-    if(window.confirm("Hapus project dari database?")) {
+    if(window.confirm("Beneran mau hapus project ini?")) {
       const response = await fetch('/api/delete-project', { method: 'DELETE', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({id}) });
       if(response.ok) setList(list.filter(i => i.id !== id));
-      else alert("Gagal menghapus project.");
+      else alert("Oops, gagal menghapus project.");
     }
   };
   const moveUp = (idx) => { 
@@ -450,13 +488,13 @@ const PortfolioAdmin = () => {
     const l=[...list]; [l[idx-1], l[idx]]=[l[idx], l[idx-1]]; 
     setList(l); 
     // Portfolio saves on per-item basis natively via add/update hooks, but reordering requires updating the DB. Wait, Portfolio items are independent rows!
-    alert('Susunan untuk portfolio projects masih diurutkan berdasar waktu (ID) di database Neon.');
+    alert('Sekadar info: Susunan project portfolio di halaman utama saat ini akan selalu diurutkan berdasar waktu terbaru otomatis ya.');
   };
   const moveDown = (idx) => { 
     if(idx===list.length-1) return; 
     const l=[...list]; [l[idx+1], l[idx]]=[l[idx], l[idx+1]]; 
     setList(l); 
-    alert('Susunan untuk portfolio projects masih diurutkan berdasar waktu (ID) di database Neon.');
+    alert('Sekadar info: Susunan project portfolio di halaman utama saat ini akan selalu diurutkan berdasar waktu terbaru otomatis ya.');
   };
 
   return (

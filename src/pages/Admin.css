@@ -244,3 +244,78 @@
     text-align: center;
   }
 }
+
+/* Login Styles */
+.admin-login {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--bg-secondary);
+}
+
+.login-form {
+  background-color: var(--bg);
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: var(--shadow-lg);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.login-form h2 {
+  margin-bottom: 1.5rem;
+  color: var(--text-h);
+}
+
+.login-form form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.login-form input {
+  padding: 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 1rem;
+  background-color: var(--bg-secondary);
+  color: var(--text);
+}
+
+.login-form input:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.login-form button {
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  padding: 0.75rem;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.login-form button:hover {
+  background-color: var(--primary-hover);
+}
+
+.btn-logout {
+  background-color: #ef4444;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  margin-right: 1rem;
+  transition: background-color 0.2s;
+}
+
+.btn-logout:hover {
+  background-color: #dc2626;
+}
