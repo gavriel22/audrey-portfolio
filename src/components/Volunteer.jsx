@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import './Volunteer.css';
 
-const Volunteer = () => {
+const Volunteer = ({ onLoaded }) => {
   const [volunteers, setVolunteers] = useState([]);
   const [showAll, setShowAll] = useState(false);
 

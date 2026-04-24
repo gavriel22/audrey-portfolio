@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import './Experience.css'; // Assuming this uses the same CSS file name or index.css for list containers
 
-const Experience = () => {
+const Experience = ({ onLoaded }) => {
   const [experiences, setExperiences] = useState([]);
   const [showAll, setShowAll] = useState(false);
 

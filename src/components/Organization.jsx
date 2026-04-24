@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-const Organization = () => {
+const Organization = ({ onLoaded }) => {
   const [organizations, setOrganizations] = useState([]);
   const [showAll, setShowAll] = useState(false);
 

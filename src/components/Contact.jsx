@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import './Contact.css';
 
-const Contact = () => {
+const Contact = ({ onLoaded }) => {
   const [contactData, setContactData] = useState({
     title: "Let's talk about your next project.",
     subtitle: "Whether you have a question or just want to say hi, I'll try my best to get back to you!",

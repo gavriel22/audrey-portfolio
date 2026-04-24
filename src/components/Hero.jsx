@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import './Hero.css';
 
-const Hero = () => {
+const Hero = ({ onLoaded }) => {
   const [heroData, setHeroData] = useState({
     greeting: "Hello, I'm",
     title: "Meliora Audrey",

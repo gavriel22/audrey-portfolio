@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import './Portfolio.css';
 
-const Portfolio = () => {
+const Portfolio = ({ onLoaded }) => {
   const [projects, setProjects] = useState([]);
   const [showAll, setShowAll] = useState(false);
 
@@ -9,8 +9,9 @@ const Portfolio = () => {
     fetch('/api/get-projects')
       .then((res) => { if (res.ok) return res.json(); throw new Error(); })
       .then((data) => { if (Array.isArray(data)) setProjects(data); })
-      .catch((err) => console.error("Gagal ambil data:", err));
-  }, []);
+      .catch((err) => console.error("Gagal ambil data:", err))
+      .finally(() => { if (onLoaded) onLoaded(); });
+  }, [onLoaded]);
 
   if (!Array.isArray(projects) || projects.length === 0) return null;
 

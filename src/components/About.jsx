@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import './About.css';
 
-const About = () => {
+const About = ({ onLoaded }) => {
   const [aboutData, setAboutData] = useState({
     bio1: "Hi, I'm Audrey, a dedicated Industrial Engineering student at Universitas Gadjah Mada (UGM). I have a strong passion for solving complex operational problems and creating highly efficient systems processes.",
     bio2: "My approach blends analytical thinking with practical problem-solving. I specialize in supply chain management, operational research, data analysis, and lean manufacturing principles. I am eager to apply my knowledge to drive continuous improvement in real-world scenarios.",

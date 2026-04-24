@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import './Achievement.css';
 
-const Achievement = () => {
+const Achievement = ({ onLoaded }) => {
   const [achievements, setAchievements] = useState([]);
   const [showAll, setShowAll] = useState(false);
 

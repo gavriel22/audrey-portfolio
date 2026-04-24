@@ -59,7 +59,7 @@
 .timeline-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   flex-wrap: wrap;
   gap: 12px;
   margin-bottom: 8px;
@@ -69,6 +69,7 @@
   margin: 0;
   font-size: 1.25rem;
   color: var(--text-h);
+  line-height: 1.4;
 }
 
 .timeline-period {
@@ -78,6 +79,12 @@
   background-color: rgba(37, 99, 235, 0.1);
   padding: 4px 12px;
   border-radius: 12px;
+  flex-shrink: 0;
+  white-space: normal;
+  word-break: break-word;
+  max-width: 100%;
+  text-align: right;
+  margin-left: auto;
 }
 
 .timeline-company {
@@ -91,11 +98,4 @@
   color: var(--text);
   font-size: 1rem;
   line-height: 1.6;
-}
-
-@media (max-width: 600px) {
-  .timeline-header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
 }
